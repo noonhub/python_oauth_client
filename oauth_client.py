@@ -68,7 +68,7 @@ def code_for_token(code):
 def main():
     global config
 
-    if not path.is_file('config.json'):
+    if not path.isfile('config.json'):
         print("You must have a valid config.json to run this script. Read the README!")
 
     config = json.load(open('config.json'))

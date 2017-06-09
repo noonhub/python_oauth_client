@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-import argparse
 import json
+from os import path
 import time
 import urllib
 import webbrowser
@@ -65,8 +65,11 @@ def code_for_token(code):
 
 def main():
     global config
-    with open('config.json') as data_file:
-        config = json.load(data_file)
+
+    if not path.is_file('config.json'):
+        print("You must have a valid config.json to run this script. Read the README!")
+
+    config = json.load(open('config.json'))
 
     server = AsyncServer()
     server.daemon = True

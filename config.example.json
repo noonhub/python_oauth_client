@@ -1,9 +1,11 @@
 {
-  "auth_url": "AUTHORIZATION_URL",
-  "token_url": "TOKEN_EXCHANGE_URL",
-  "client_id": "CLIENT_ID",
-  "client_secret": "CLIENT_SECRET",
-  "scopes": "SPACE DELIMINTED SCOPES",
+  "uber": {
+    "auth_url": "AUTHORIZATION_URL",
+    "token_url": "TOKEN_EXCHANGE_URL",
+    "client_id": "CLIENT_ID",
+    "client_secret": "CLIENT_SECRET",
+    "scopes": "SPACE DELIMINTED SCOPES"
+  },
   "redirect_uri": "http://localhost:8888/oauth/callback",
   "port": 8888
 }

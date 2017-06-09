@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from argparse import ArgumentParser
 import json
 from os import path
 import time
@@ -10,7 +11,7 @@ from urlparse import urlparse, parse_qs
 import requests
 
 config = None
-
+provider = 'uber'
 
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -41,32 +42,35 @@ class AsyncServer(Thread):
         server.serve_forever()
 
 
-def auth_url():
-    params = {
-        'client_id': config.get('client_id'),
-        'scope': config.get('scopes'),
-        'redirect_uri': config.get('redirect_uri'),
-        'response_type': 'code',
-
-    }
-    return config['auth_url'] + '?' + urllib.urlencode(params)
-
-
 def code_for_token(code):
     payload = {
         'code': code,
-        'client_id': config.get('client_id'),
-        'client_secret': config.get('client_secret'),
+        'client_id': config.get(provider).get('client_id'),
+        'client_secret': config.get(provider).get('client_secret'),
         'grant_type': 'authorization_code',
         'redirect_uri': config.get('redirect_uri')
     }
-    response = requests.post('https://graph.facebook.com/oauth/access_token', data=payload)
+    response = requests.post(config.get(provider).get('token_url'), data=payload)
+
+    print(response)
     print("======== OAuth Credentials ========")
     print json.dumps(response.json(), indent=4, sort_keys=True)
 
 
+def auth_url():
+    params = {
+        'client_id': config.get(provider).get('client_id'),
+        'scope': config.get(provider).get('scopes'),
+        'redirect_uri': config.get('redirect_uri'),
+        'response_type': 'code',
+
+    }
+    return config.get(provider).get('auth_url') + '?' + urllib.urlencode(params)
+
+
 def main():
     global config
+    global provider
 
     if not path.isfile('config.json'):
         print("You must have a valid config.json to run this script. Read the README!")
@@ -84,4 +88,11 @@ def main():
 
 
 if __name__ == "__main__":
+    parser = ArgumentParser()
+    parser.add_argument('-p', '--provider', default='uber', help='The OAuth provider you are authenticating with.')
+
+    args = parser.parse_args()
+    global provider
+    provider = args.provider
+
     main()

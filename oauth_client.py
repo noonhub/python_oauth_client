@@ -22,7 +22,9 @@ class RequestHandler(BaseHTTPRequestHandler):
         query_components = parse_qs(url.query)
         code = query_components.get('code')
         html = '<html><body>' \
+               '<h1 style="text-align: center;">' \
                '<a href="JavaScript:window.close()">Close This Window And Return To Terminal</a>' \
+               '</h1>' \
                '</body></html>'
         code_for_token(code)
 
